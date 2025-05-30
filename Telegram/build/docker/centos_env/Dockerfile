@@ -698,7 +698,6 @@ RUN git clone -b {{ QT_TAG }} --depth=1 {{ GIT }}/qt/qt5.git \
 	&& find ../../patches/qtwayland_{{ QT }} -type f -print0 | sort -z | xargs -r0 git apply \
 	&& cd .. \
 	&& cmake -B build . \
-		-DCMAKE_INSTALL_PREFIX=/usr/local \
 		-DBUILD_SHARED_LIBS=OFF \
 		-DQT_GENERATE_SBOM=OFF \
 		-DINPUT_libpng=qt \
@@ -821,6 +820,7 @@ COPY --link --from=patches {{ LibrariesPath }}/patches patches
 RUN patch -p1 -d /usr/lib64/gobject-introspection -i $PWD/patches/gobject-introspection.patch && rm -rf patches
 
 WORKDIR ../tdesktop
+ENV QT {{ QT }}
 ENV BOOST_INCLUDEDIR /usr/include/boost1.78
 ENV BOOST_LIBRARYDIR /usr/lib64/boost1.78
 
